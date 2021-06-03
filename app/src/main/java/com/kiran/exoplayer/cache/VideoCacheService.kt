@@ -13,12 +13,13 @@ import com.google.android.exoplayer2.upstream.cache.CacheDataSource
 import com.google.android.exoplayer2.upstream.cache.CacheWriter
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.kiran.exoplayer.ExoApp
+import com.kiran.exoplayer.VIDEO_LIST
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class VideoCacheService: JobIntentService() {
+class VideoCacheService : JobIntentService() {
 
     private var cachingJob: Job? = null
     private var videosList: ArrayList<String>? = null
@@ -44,8 +45,8 @@ class VideoCacheService: JobIntentService() {
 
         intent.let {
             val extras = intent.extras
-            videosList = extras?.getStringArrayList("VIDEO_LIST")
-            Log.d("VideoCacheService", "videosList:"+videosList?.size)
+            videosList = extras?.getStringArrayList(VIDEO_LIST)
+            Log.d("VideoCacheService", "videosList:" + videosList?.size)
             if (!videosList.isNullOrEmpty()) {
                 Log.d("VideoCacheService", "preCacheVideo videosList:")
                 preCacheVideo(videosList)
@@ -66,13 +67,17 @@ class VideoCacheService: JobIntentService() {
             val dataSpec = DataSpec(videoUri)
 
             val progressListener =
-                CacheWriter.ProgressListener { requestLength, bytesCached, newBytesCached ->
-                    val downloadPercentage: Double = (bytesCached * 100.0
-                            / requestLength)
-
-                    Log.d("VideoCacheService", "downloadPercentage $downloadPercentage videoUri: $videoUri")
+                CacheWriter.ProgressListener { requestLength, bytesCached, _ ->
+                    val downloadPercentage: Double = (bytesCached * 100.0 / requestLength)
+                    Log.d(
+                        "VideoCacheService",
+                        "downloadPercentage $downloadPercentage videoUri: $videoUri"
+                    )
                 }
 
+            /**
+             * using coroutines to cache the videos in IO thread.
+             */
             cachingJob = GlobalScope.launch(Dispatchers.IO) {
                 cacheVideo(dataSpec, progressListener)
                 preCacheVideo(videosList)

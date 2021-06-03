@@ -24,7 +24,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
         intent.extras?.let {
-            videoUrl = it.getString("VIDEO_URL", "")
+            videoUrl = it.getString(VIDEO_URL, "")
             if(videoUrl.isBlank()) {
                 val rand = Random.nextInt(0,3)
                 videoUrl = when(rand){

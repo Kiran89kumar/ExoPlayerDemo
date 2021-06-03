@@ -35,7 +35,7 @@ class PlayerWithCacheActivity : AppCompatActivity(), Player.EventListener {
         setContentView(R.layout.activity_player)
         progressBar = findViewById(R.id.progressBar)
         intent.extras?.let {
-            videoUrl = it.getString("VIDEO_URL", "")
+            videoUrl = it.getString(VIDEO_URL, "")
             if(videoUrl.isBlank()) {
                 val rand = Random.nextInt(0,3)
                 videoUrl = when(rand){
@@ -149,8 +149,9 @@ class PlayerWithCacheActivity : AppCompatActivity(), Player.EventListener {
     }
 
     companion object {
-        const val STREAM_URL1 = "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4"
-        const val STREAM_URL2 = "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4"
-        const val STREAM_URL3 = "https://html5demos.com/assets/dizzy.mp4"
+        const val STREAM_URL1 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+        const val STREAM_URL2 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
+        const val STREAM_URL3 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
+        const val STREAM_URL4 = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
     }
 }
